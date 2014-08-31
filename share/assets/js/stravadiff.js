@@ -7,8 +7,11 @@ $(document).ready(function() {
 
     var inputs = $("input[type=radio]");
     var opposites = inputs.filter("[name=" + (side == "a" ? "b" : "a") + "]");
-    opposites.filter("[disabled]").removeAttr("disabled");
+    opposites.filter("[disabled]").removeAttr("disabled").removeClass("selected");
     opposites.filter("[value="+id+"]").attr("disabled", "disabled");
+
+    $("tr.selected").removeClass("selected");
+    inputs.filter(":checked").parents("tr").addClass("selected");
 
     if (inputs.filter(":checked").length == 2) {
       var a = inputs.filter("[name=a]:checked").val()
