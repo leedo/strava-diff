@@ -18,7 +18,8 @@ my ($client_id, $client_secret) = do {
 my $tx = Text::Xslate->new(
   path => "./share/templates",
   function => {
-    minutes => sub { int($_[0] / 60) . "m" }
+    minutes => sub { int($_[0] / 60) . "m" },
+    diff => sub { $_[0] ? sprintf "%+ds", $_[0] : "" },
   }
 );
 

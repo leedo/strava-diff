@@ -8,15 +8,11 @@
       <th class="num">Diff</th>
     </tr>
   </thead>
-  <: for $diff.a.segment_efforts -> $effort { :>
-    <tr class="<:= $diff.diff[$effort.id] ? "" : "added":>">
-      <td><:= $effort.name :></td>
-      <td class="num"><:= $effort.elapsed_time | minutes :></td>
-      <: if $diff.diff[$effort.id] { :>
-      <td class="num <:= $diff.diff[$effort.id] < 0 ? "improved" : "worse" :>"><:= $diff.diff[$effort.id] :>s</td>
-      <: } else { :>
-      <td></td>
-      <: } :>
+  <: for $diff.segments -> $segment { :>
+    <tr class="<:= $segment.class :>">
+      <td><:= $segment.effort.name :></td>
+      <td class="num"><:= $segment.effort.elapsed_time | minutes :></td>
+      <td class="num change"><:= $segment.change | diff :></td>
     </tr>
   <: } :>
 </table>

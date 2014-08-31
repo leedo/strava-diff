@@ -1,6 +1,8 @@
 package StravaDiff;
 
 use feature "signatures";
+use List::MoreUtils qw{any};
+use List::Util qw{first};
 use HTTP::Tiny;
 use JSON::XS;
 use Data::Dump qw{pp};
@@ -58,20 +60,39 @@ sub activity ($self, %args) {
 sub diff ($self, %args) {
   my $a = $self->activity(id => $args{a});
   my $b = $self->activity(id => $args{b});
-  my %diff;
+  my @efforts;
 
   for my $effort (@{$a->{segment_efforts}}) {
-    for my $search (@{$b->{segment_efforts}}) {
-      if ($search->{segment}{id} == $effort->{segment}{id}) {
-        $diff{$effort->{id}} = $effort->{elapsed_time} - $search->{elapsed_time};
-      }
+    my $match = first {$_->{segment}{id} == $effort->{segment}{id}} @{$b->{segment_efforts}};
+    if ($match) {
+      my $change = $effort->{elapsed_time} - $match->{elapsed_time};
+      push @efforts, {
+        effort => $effort,
+        change => $change,
+        class => $change == 0 ? "same" : $change > 0 ? "worse" : "improved",
+      };
     }
+    else {
+      push @efforts, {
+        effort => $effort,
+        class => "added",
+      };
+    }
+  }
+
+  for my $i (0 .. @{$b->{segment_efforts}} - 1) {
+    my $effort = $b->{segment_efforts}[$i];
+    next if any {$_->{segment}{id} == $effort->{segment}{id}} @{$a->{segment_efforts}};
+    @efforts = (@efforts[0 .. $i], {
+      effort => $effort,
+      class => "removed",
+    }, @efforts[$i + 1 .. $#efforts]);
   }
 
   return {
     a => $a,
     b => $b,
-    diff => \%diff
+    segments => \@efforts
   };
 }
 

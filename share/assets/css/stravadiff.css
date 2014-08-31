@@ -33,11 +33,15 @@ tr.added td {
   background-color: #D4FDCB !important;
 }
 
-td.improved {
+tr.removed td {
+  background-color: #FFBAB7 !important;
+}
+
+tr.improved td.change {
   background-color: #A9EF8D !important;
 }
 
-td.worse {
+tr.worse td.change {
   background-color: #F57A82 !important;
 }
 
