@@ -50,7 +50,7 @@ builder {
       ];
     }
 
-    return [301, [Location => $strava->oauth_url], ["redirecting"]]
+    return [301, [Location => $strava->oauth_url($req->base . "authorize")], ["redirecting"]]
       unless $strava->can_read;
 
     if ($req->path_info eq "/") {

@@ -23,12 +23,12 @@ sub can_read ($self) {
   defined $self->{token};
 }
 
-sub oauth_url ($self) {
+sub oauth_url ($self, $return) {
   my $uri = URI->new("$self->{base}/oauth/authorize");
   $uri->query_form_hash({
     client_id => $self->{client}{id},
-    redirect_uri => "http://127.0.0.1:5000/authorize",
-    response_type => "code"
+    redirect_uri => $return,
+    response_type => "code",
   });
   $uri->as_string;
 }
