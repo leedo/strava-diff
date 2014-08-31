@@ -6,6 +6,7 @@ use JSON::XS;
 use Data::Dump qw{pp};
 use URI;
 use URI::QueryParam;
+use Redis;
 
 sub new ($class, $id, $secret, $token) {
   bless {
@@ -75,11 +76,18 @@ sub diff ($self, %args) {
 }
 
 sub api_request ($self, $meth, $path, %query) {
-  my $client = HTTP::Tiny->new;
-  my $res = $client->$meth("$self->{base}/api/v3/$path", {
-    headers => { Authorization => "Bearer $self->{token}"}
-  });
-  return decode_json $res->{content};
+  my $redis = Redis->new;
+  my $key = join ":", $meth, $path, sort %query;
+  my $json = $redis->get($key);
+  if (!$json) {
+    my $client = HTTP::Tiny->new;
+    my $res = $client->$meth("$self->{base}/api/v3/$path", {
+      headers => { Authorization => "Bearer $self->{token}"}
+    });
+    $json = $res->{content};
+    $redis->setex($key, 300, $json);
+  }
+  return decode_json $json;
 }
 
 1;
