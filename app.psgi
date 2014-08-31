@@ -51,14 +51,28 @@ builder {
       ];
     }
 
-    return [301, [Location => $strava->oauth_url($req->base . "authorize")], ["redirecting"]]
-      unless $strava->can_read;
+    unless ($strava->can_read) {
+      return [
+        200,
+        [qw{Content-Type text/html}],
+        [$tx->render("authorize.tx", {location => $strava->oauth_url($req->base . "authorize")})]
+      ];
+    }
 
     if ($req->path_info eq "/") {
       return [
         200,
         [qw{Content-Type text/html}],
         [$tx->render("index.tx", {strava => $strava})]
+      ];
+    }
+
+    if ($req->path_info eq "/logout") {
+      delete $env->{"psgix.session"}{token};
+      return [
+        301,
+        [qw{Location /}],
+        ["redirecting"],
       ];
     }
 

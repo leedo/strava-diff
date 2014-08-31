@@ -86,3 +86,11 @@ tr.selected td {
 h2 {
   margin-top: 0;
 }
+
+a#logout {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 3px 10px;
+  background: #fff;
+}

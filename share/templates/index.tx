@@ -3,6 +3,7 @@
     <link type="text/css" rel="stylesheet" href="/assets/css/stravadiff.css"/>
   </head>
   <body>
+    <a href="/logout" id="logout">logout</a>
     <div id="activities">
       <table cellspacing="0" cellpadding="0" border="0">
       <: for $strava.activities -> $ride { :>
