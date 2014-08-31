@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/assets/css/stravadiff.css"/>
+  </head>
+  <body>
+    <table id="container" cellspacing="0" cellpadding="0" border="0">
+      <tr>
+        <td id="activities">
+          <table cellspacing="0" cellpadding="0" border="0">
+          <: for $strava.activities -> $ride { :>
+            <tr>
+              <td><input type="radio" name="a" value="<:= $ride.id :>"></td>
+              <td><input type="radio" name="b" value="<:= $ride.id :>"></td>
+              <td>
+                  <:= $ride.name :><br>
+                  <date><:= $ride.start_date :></date>
+              </td>
+            </tr>
+          <: } :>
+          </table>
+        </td>
+        <td id="diff"></td>
+      </tr>
+    </table>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/assets/js/stravadiff.js"></script>
+  </body>
+</html>

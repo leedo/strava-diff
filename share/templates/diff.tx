@@ -1,0 +1,22 @@
+<h2><:= $diff.a.name :> vs <:= $diff.b.name :></h2>
+<h3>Segments</h3>
+<table cellspacing="0" cellpadding="0" border="0" class="segments">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="num">Time</th>
+      <th class="num">Diff</th>
+    </tr>
+  </thead>
+  <: for $diff.a.segment_efforts -> $effort { :>
+    <tr class="<:= $diff.diff[$effort.id] ? "" : "added":>">
+      <td><:= $effort.name :></td>
+      <td class="num"><:= $effort.elapsed_time | minutes :></td>
+      <: if $diff.diff[$effort.id] { :>
+      <td class="num <:= $diff.diff[$effort.id] < 0 ? "improved" : "worse" :>"><:= $diff.diff[$effort.id] :>s</td>
+      <: } else { :>
+      <td></td>
+      <: } :>
+    </tr>
+  <: } :>
+</table>

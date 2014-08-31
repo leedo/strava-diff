@@ -1,0 +1,17 @@
+<h2><:= $activity.name :></h2>
+<h3>Segments</h3>
+<table cellspacing="0" cellpadding="0" border="0" class="segments">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="num">Time</th>
+    </tr>
+  </thead>
+
+  <: for $activity.segment_efforts -> $effort { :>
+    <tr>
+      <td><:= $effort.name :></td>
+      <td class="num"><:= $effort.elapsed_time | minutes :></td>
+    </tr>
+  <: } :>
+</table>
